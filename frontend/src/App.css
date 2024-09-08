@@ -1,0 +1,390 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vw;
+  font-family: sans-serif;
+  overflow-x: hidden;
+}
+
+/* Navbar Styles */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 90px;
+  padding: 0 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #4f46e5; /* Matching the background color */
+  z-index: 100; /* Ensure Navbar stays on top */
+  border: none; /* Remove any visible boundary */
+  box-shadow: none;
+}
+
+nav img {
+  height: 140px;
+}
+
+nav .login-btn, .admin-btn {
+  padding: 1em 2em;
+  border-radius: 3px;
+  background-color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 10px;
+}
+
+/* DashboardNavbar specific styles */
+.admin-btn, .logout-btn {
+  padding: 1em 2em;
+  border-radius: 3px;
+  background-color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-right: 10px
+}
+
+nav .admin-btn {
+  background-color: white;
+  color: #4f46e5; /* Match the text color with the login button */
+}
+
+nav .admin-btn:hover {
+  background-color: #6b21a8;
+}
+
+nav .login-btn:hover {
+  background-color: #6b21a8;
+}
+
+.add-problem-navbar {
+  background-color: #4f46e5; /* Example background color */
+  padding: 10px; /* Adjust padding as needed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-problem-navbar img {
+  height: 40px; /* Adjust the size of the logo as needed */
+}
+
+/* Container Styles */
+.sign-up-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(#4f46e5, #6b21a8); /* Gradient background */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Form Styles */
+.sign-up-form {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Heading Styles */
+.sign-up-container h2 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Label Styles */
+.sign-up-form label {
+  display: block;
+  color: #555;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Input Styles */
+.sign-up-form input[type="text"],
+.sign-up-form input[type="email"],
+.sign-up-form input[type="password"] {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  outline: none;
+  transition: border 0.3s;
+}
+
+.sign-up-form input[type="text"]:focus,
+.sign-up-form input[type="email"]:focus,
+.sign-up-form input[type="password"]:focus {
+  border-color: #4f46e5;
+}
+
+/* Button Styles */
+.sign-up-form button {
+  width: 100%;
+  padding: 10px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.sign-up-form button:hover {
+  background: #6b21a8;
+}
+
+/* Homepage Styles */
+.home {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(#4f46e5, #6b21a8);
+  display: grid;
+  place-items: center;
+  margin: 0; /* Remove margin */
+  padding: 0; /* Remove padding */
+}
+
+
+
+/* Dashboard Styles */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(#4f46e5, #6b21a8);
+  margin-top: 90px; /* Offset for the Navbar height */
+}
+
+.dashboard-content {
+  width: 100%;
+  max-width: 1200px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.overview,
+.recent-activities,
+.problem-list {
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.overview-stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stat-item {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: calc(33% - 10px);
+  text-align: center;
+  font-weight: bold;
+  color: #4f46e5; /* Matching the color scheme */
+}
+
+.activity-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.activity-list li {
+  background-color: #ffffff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Problem List Styles */
+.problem-list {
+  margin-bottom: 20px;
+}
+
+.problem-item {
+  background-color: #f9fafb; /* Light gray background for problem item */
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  transition: background 0.3s, transform 0.2s; /* Smooth hover effect */
+  cursor: pointer; /* Pointer cursor to indicate it's clickable */
+}
+
+.problem-item:hover {
+  background-color: #e0e7ff; /* Slightly darker background on hover */
+  transform: translateY(-2px); /* Lift the problem card a little */
+}
+
+.problem-title {
+  font-size: 1.25em;
+  font-weight: bold;
+  color: #4f46e5; /* Same theme color */
+  margin-bottom: 8px;
+}
+
+.problem-description {
+  font-size: 1em;
+  color: #6b7280; /* Dark gray for the description */
+}
+
+/*add problem section*/
+
+/* .add-problem-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Optionally add padding or margin */
+
+  .add-problem-container {
+    background: linear-gradient(#4f46e5, #6b21a8) ; /* Change this to your desired background color */
+    padding: 20px; /* Add some padding if needed */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    max-width: 10000px; /* Optional: Set a max-width to center the content */
+    margin: 0 auto; /* Optional: Center the container */
+  }
+
+.add-problem-title {
+  font-size: 2.5rem; /* Increase this value to make it bigger */
+  margin-bottom: 50px; /* Adjust the gap between the heading and the form */
+  text-align: center;
+  margin-top: 100px;
+}
+
+.add-problem-form {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background: whitesmoke;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-problem-form fieldset {
+  margin-bottom: 15px;
+}
+
+.add-problem-form label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.add-problem-form input,
+.add-problem-form textarea,
+.add-problem-form select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.add-example-btn,
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-example-btn:hover,
+.submit-btn:hover {
+  background-color: #6b21a8;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/*Problem detail page*/
+
+/* App.css */
+.problem-detail-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.problem-description {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.compiler {
+  flex: 1;
+  padding: 20px;
+}
+
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.result {
+  margin-top: 20px;
+}
+
+
+
+/* Additional Styles for Responsive Design */
+@media (max-width: 768px) {
+  .overview-stats {
+    flex-direction: column;
+  }
+
+  .stat-item {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .problem-item {
+    padding: 10px;
+  }
+
+  .problem-title {
+    font-size: 1.1em;
+  }
+}

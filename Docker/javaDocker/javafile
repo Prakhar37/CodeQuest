@@ -1,0 +1,5 @@
+FROM openjdk:latest
+WORKDIR /code
+COPY . .
+# CMD ["javac", "code.java"]
+CMD ["sh", "-c", "javac code.java && java code < /input.txt"]

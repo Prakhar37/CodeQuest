@@ -1,0 +1,5 @@
+FROM gcc:latest
+WORKDIR /code
+COPY . .
+# CMD ["g++", "code.cpp", "-o", "code.exe"]
+CMD ["sh", "-c", "g++ code.cpp -o code.out && ./code.out < /input.txt"]
