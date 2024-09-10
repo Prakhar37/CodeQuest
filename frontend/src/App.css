@@ -43,7 +43,7 @@ nav .login-btn, .admin-btn {
 }
 
 /* DashboardNavbar specific styles */
-.admin-btn, .logout-btn {
+.admin-btn, .logout-btn,.run-btn {
   padding: 1em 2em;
   border-radius: 3px;
   background-color: white;
@@ -336,35 +336,153 @@ h2 {
   margin-top: 10px;
 }
 
-/*Problem detail page*/
-
-/* App.css */
+/* Styles for the problem detail page */
 .problem-detail-container {
   display: flex;
-  justify-content: space-between;
-  padding: 20px;
+  height: 100vh;
+  background: linear-gradient(#4f46e5, #6b21a8);
+  padding: 40px;
+  color: black;
 }
 
 .problem-description {
   flex: 1;
+  background-color: rgba(255, 255, 255, 0.851);
   padding: 20px;
-  border-right: 1px solid #ccc;
+  margin-right: 10px;
+  border-radius: 8px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for a lifted effect */
 }
 
 .compiler {
   flex: 1;
+  background-color: rgba(255, 255, 255, 0.851);
   padding: 20px;
+  margin-left: 10px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-textarea {
-  width: 100%;
-  box-sizing: border-box;
+h2 {
+  font-size: 32px; /* Bigger font size for the question title */
+  font-weight: 700; /* Bold font */
+  margin-bottom: 15px;
+  color: #1f2937; /* Darker color for better contrast */
 }
 
-.result {
+h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+p {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #555;
+}
+
+textarea.input-area {
   margin-top: 20px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border: none;
+  resize: none;
 }
 
+select {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.submit-btn {
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #34d399;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn:hover {
+  background-color: #059669;
+}
+
+.result, .error {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-radius: 5px;
+}
+
+pre {
+  white-space: pre-wrap;
+}
+
+/*styling for party popper*/
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  text-align: center;
+}
+
+.popup-content.accepted {
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+}
+
+.popup-content.rejected {
+  background-color: #f8d7da;
+  border: 2px solid #dc3545;
+}
+
+.party-popper {
+  background-image: url('/images/party-popper.png'); /* Add your party popper image here */
+  width: 50px;
+  height: 50px;
+  margin: 0 auto;
+  animation: pop 0.5s ease-out;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.close-btn {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 
 /* Additional Styles for Responsive Design */

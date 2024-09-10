@@ -14,7 +14,7 @@ const Login = () => {
     axios.post('http://localhost:3000/auth/login', {
       email,
       password,
-    }).then(response => {
+    },{withCredentials: true,}).then(response => {
         console.log(response.data);
       if (response.data.status) {
         navigate('/dashboard');

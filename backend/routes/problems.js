@@ -1,18 +1,35 @@
 import express from 'express';
 import Problem from '../models/Problem.js'; // Adjust the path if necessary
+import authenticate from '../middleware/authen.js';
 
 const router = express.Router();
 
 // Create a new problem
 router.post('/create', async (req, res) => {
   try {
-    const problem = new Problem(req.body);
+    // Extracting the hiddenTestCases from the request body
+    const { title, description, inputFormat, outputFormat, constraints, examples, hiddenTestCases, difficulty } = req.body;
+
+    // Creating a new problem object including hidden test cases
+    const problem = new Problem({
+      title,
+      description,
+      inputFormat,
+      outputFormat,
+      constraints,
+      examples,
+      hiddenTestCases,  // <-- Added hiddenTestCases to the problem creation
+      difficulty,
+    });
+
+    // Saving the new problem to the database
     await problem.save();
     res.status(201).json(problem);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
+
 
 // Get all problems
 router.get('/all', async (req, res) => {
@@ -25,7 +42,7 @@ router.get('/all', async (req, res) => {
 });
 
 // Get a problem by ID
-router.get('/:id', async (req, res) => {
+router.get('/:id',async (req, res) => {
   try {
     const problem = await Problem.findById(req.params.id);
     if (!problem) {
@@ -38,7 +55,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update a problem by ID
-router.put('/:id', async (req, res) => {
+router.put('/:id',async (req, res) => {
   try {
     const problem = await Problem.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!problem) {

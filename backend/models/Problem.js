@@ -27,6 +27,18 @@ const problemSchema = new mongoose.Schema({
       output: String,
     },
   ],
+  hiddenTestCases: [
+    {
+      input: {
+        type: String,
+        required: true,
+      },
+      output: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   difficulty: {
     type: String,
     enum: ['Easy', 'Medium', 'Hard'],

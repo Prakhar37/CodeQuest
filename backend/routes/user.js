@@ -55,10 +55,18 @@ router.post('/login', async (req, res) => {
         }
 
         // Create a JWT token
-        const token = jwt.sign({ username: user.username }, process.env.KEY, { expiresIn: '24h' });
+        //const token = jwt.sign({ username: user.username }, process.env.KEY, { expiresIn: '24h' });
+        const token = jwt.sign({ id: user._id, username: user.username }, process.env.KEY, { expiresIn: '24h' });
 
         // Set the token in a cookie
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 }); // Set maxAge to 1 hour
+        //res.cookie('token', token, { httpOnly: true, maxAge: 3600000 }); // Set maxAge to 1 hour
+
+        // Set the token in an HTTP-only cookie
+        res.cookie('token', token, {
+            httpOnly: true, // Prevent access to the cookie from JavaScript
+            secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+            maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
+        });
 
         return res.status(200).json({ status: true, message: "Login successfully" });
     } catch (error) {

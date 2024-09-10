@@ -26,6 +26,10 @@ app.use(cookieParser());
 app.use('/auth', userRouter);
 app.use('/api/problems', problemsRouter); // Add the problems route
 app.use(execution);
+app.get('/test', (req, res) => {
+  res.send('Test route is working');
+});
+
 
 // Database connection
 mongoose.connect(process.env.MONGO_URL, {

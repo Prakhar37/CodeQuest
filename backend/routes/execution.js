@@ -6,13 +6,16 @@ import { exec } from "child_process";
 import { fileURLToPath } from "url";
 import Problem from "../models/Problem.js";
 import { User } from "../models/User.js";
-import { authenticate } from "../middleware/authen.js";
+import authenticate from "../middleware/authen.js";
 import dotenv from "dotenv";
 dotenv.config();
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const router = express.Router();
+
+//router.use(authenticate);
 
 // Directory setup for storing code files, inputs, and outputs
 const dirFiles = path.join(__dirname, "..", "programFiles");
@@ -58,27 +61,19 @@ const extractPublicClassName = (filePath) => {
 const executeCode = (filePath, language, inputPath, timeLimit = 5, memoryLimit = "256m") => {
     return new Promise((resolve, reject) => {
         let command;
-       // const BASE_URL = process.env.AWS_BASE_URL;
+        
         switch (language) {
             case "cpp":
                 command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --volume ${filePath}:/code/code.cpp --volume ${inputPath}:/input.txt cpp-docker sh -c "g++ /code/code.cpp -o /code/code.out && /code/code.out < /input.txt"`;
-
-               //command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --v ${filePath}:/code/code.cpp --volume ${inputPath}:/input.txt cpp-docker sh -c "g++ /code/code.cpp -o /code/code.out && /code/code.out < /input.txt"`;
-                // command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} -v ${path.dirname(filePath)}:/code cpp-docker`;
                 break;
             case "java":
                 command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --volume ${filePath}:/code/Main.java --volume ${inputPath}:/input.txt java-docker sh -c "javac /code/Main.java && java -cp /code Main < /input.txt"`;
-                //command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --v ${filePath}:/code/Main.java --volume ${inputPath}:/input.txt java-docker sh -c "javac /code/Main.java && java -cp /code Main < /input.txt"`;
                 break;
             case "python":
                 command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --volume ${filePath}:/code/code.py --volume ${inputPath}:/code/input.txt python-docker sh -c "python /code/code.py < /code/input.txt"`;
-
-               // command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --v ${filePath}:/code/code.py --volume ${inputPath}:/code/input.txt python-docker sh -c "python /code/code.py < /code/input.txt"`;
                 break;
             case "javascript":
                 command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --volume ${filePath}:/code/code.js --volume ${inputPath}:/code/input.txt node-docker sh -c "node /code/code.js < /code/input.txt"`;
-
-                //command = `docker run --rm --memory=${memoryLimit} --cpus=1 --ulimit cpu=${timeLimit} --v ${filePath}:/code/code.js --volume ${inputPath}:/code/input.txt node-docker sh -c "node /code/code.js < /code/input.txt"`;
                 break;
             default:
                 reject(new Error("Unsupported language"));
@@ -103,19 +98,45 @@ const executeCode = (filePath, language, inputPath, timeLimit = 5, memoryLimit =
     });
 };
 
-// Function to clean up old files
+// Updated cleanup function to check for directory existence before deleting
 const cleanupFiles = () => {
-    const files = fs.readdirSync(dirCodes);
-    files.forEach(file => {
-        const filePath = path.join(dirCodes, file);
-        fs.unlinkSync(filePath);
-    });
+    if (fs.existsSync(dirCodes)) {
+        fs.readdir(dirCodes, (err, files) => {
+            if (err) {
+                console.error('Error reading dirCodes:', err);
+                return;
+            }
+            files.forEach(file => {
+                const filePath = path.join(dirCodes, file);
+                fs.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error(`Error deleting file ${filePath}:`, unlinkErr);
+                    }
+                });
+            });
+        });
+    } else {
+        console.error('dirCodes directory does not exist');
+    }
 
-    const inputFiles = fs.readdirSync(dirInputs);
-    inputFiles.forEach(file => {
-        const filePath = path.join(dirInputs, file);
-        fs.unlinkSync(filePath);
-    });
+    if (fs.existsSync(dirInputs)) {
+        fs.readdir(dirInputs, (err, files) => {
+            if (err) {
+                console.error('Error reading dirInputs:', err);
+                return;
+            }
+            files.forEach(file => {
+                const filePath = path.join(dirInputs, file);
+                fs.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error(`Error deleting file ${filePath}:`, unlinkErr);
+                    }
+                });
+            });
+        });
+    } else {
+        console.error('dirInputs directory does not exist');
+    }
 };
 
 // Route to run code
@@ -142,7 +163,6 @@ router.post("/run", async (req, res) => {
         let finalFilePath = filePath;
 
         if (language === "java") {
-            // Extract the public class name and rename the file
             const publicClassName = extractPublicClassName(filePath);
             finalFilePath = path.join(path.dirname(filePath), `${publicClassName}.java`);
             fs.renameSync(filePath, finalFilePath);
@@ -150,7 +170,6 @@ router.post("/run", async (req, res) => {
 
         const inputPath = await generateInputFile(filePath, input, 0);
 
-        // Execute code and handle errors
         try {
             const output = await executeCode(finalFilePath, language, inputPath);
             res.status(200).json({ success: true, result: output, message: "Successfully executed" });
@@ -176,11 +195,14 @@ router.post("/run", async (req, res) => {
     }
 });
 
-
 // Route to submit code with test cases
-router.post("/submit/:id", async (req, res) => {
+router.post("/submit/:id",authenticate, async (req, res) => {
     const { id } = req.params;
     const { language, code, problem } = req.body;
+    // Handle case where req.user might be undefined
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({ success: false, error: "Unauthorized" });
+    }
     const user = await User.findById(req.user.id);
 
     if (!code) {
@@ -206,7 +228,6 @@ router.post("/submit/:id", async (req, res) => {
         let finalFilePath = filePath;
 
         if (language === "java") {
-            // Extract the public class name and rename the file
             const publicClassName = extractPublicClassName(filePath);
             finalFilePath = path.join(path.dirname(filePath), `${publicClassName}.java`);
             fs.renameSync(filePath, finalFilePath);
@@ -214,143 +235,41 @@ router.post("/submit/:id", async (req, res) => {
 
         for (let i = 0; i < testCases.length; i++) {
             const inputPath = await generateInputFile(filePath, testCases[i].input, i);
-            let output;
+
             try {
-                output = await executeCode(finalFilePath, language, inputPath);
-            } catch (error) {
-                if (error.type === "compilation") {
-                    await Problem.findByIdAndUpdate(id, {
-                        $push: {
-                            submissions: {
-                                user: user.username,
-                                result: "Compilation Error",
-                                language,
-                                code,
-                                submissionDate: Date.now()
-                            },
-                        },
-                    });
+                const output = await executeCode(finalFilePath, language, inputPath);
+                if (output.trim() !== testCases[i].expectedOutput.trim()) {
                     return res.status(200).json({
                         success: false,
-                        result: "Compilation error",
-                        message: error.stderr,
-                    });
-                } else if (error.type === "TLE") {
-                    await Problem.findByIdAndUpdate(id, {
-                        $push: {
-                            submissions: {
-                                user: user.username,
-                                result: `Time Limit Exceeded on testcase ${i + 1}`,
-                                language,
-                                code,
-                                submissionDate: Date.now()
-                            },
-                        },
-                    });
-                    return res.status(200).json({
-                        success: false,
-                        result: `Time Limit Exceeded on testcase ${i + 1}`,
-                        message: error.stderr,
-                    });
-                } else if (error.type === "MLE") {
-                    await Problem.findByIdAndUpdate(id, {
-                        $push: {
-                            submissions: {
-                                user: user.username,
-                                result: `Memory Limit Exceeded on testcase ${i + 1}`,
-                                language,
-                                code,
-                                submissionDate: Date.now()
-                            },
-                        },
-                    });
-                    return res.status(200).json({
-                        success: false,
-                        result: `Memory Limit Exceeded on testcase ${i + 1}`,
-                        message: error.stderr,
-                    });
-                } else if (error.type === "runtime") {
-                    await Problem.findByIdAndUpdate(id, {
-                        $push: {
-                            submissions: {
-                                user: user.username,
-                                result: `Runtime error on testcase ${i + 1}`,
-                                language,
-                                code,
-                                submissionDate: Date.now()
-                            },
-                        },
-                    });
-                    return res.status(200).json({
-                        success: false,
-                        result: `Runtime error on testcase ${i + 1}`,
-                        message: error.stderr,
-                    });
-                } else {
-                    return res.status(500).json({
-                        success: false,
-                        result: "Internal Server Error",
-                        message: `Failed to execute code on testcase ${i + 1}`
+                        result: output,
+                        message: `Wrong Answer on test case ${i + 1}`,
                     });
                 }
-            }
-
-            if (output.trim() !== testCases[i].output.trim()) {
-                await Problem.findByIdAndUpdate(id, {
-                    $push: {
-                        submissions: {
-                            user: user.username,
-                            result: `WA on testcase ${i + 1}`,
-                            language,
-                            code,
-                            submissionDate: Date.now()
-                        },
-                    },
-                });
-                return res.status(200).json({
-                    success: false,
-                    result: `Wrong Answer on testcase ${i + 1}`,
-                    message: `Expected Output:\n${testCases[i].output.trim()}\nYour Output:\n${output.trim()}`,
-                });
+            } catch (error) {
+                if (error.type === "compilation") {
+                    return res.status(200).json({ success: false, result: "Compilation Error", message: error.stderr });
+                } else if (error.type === "TLE") {
+                    return res.status(200).json({ success: false, result: "Time Limit Exceeded", message: error.stderr });
+                } else if (error.type === "MLE") {
+                    return res.status(200).json({ success: false, result: "Memory Limit Exceeded", message: error.stderr });
+                } else if (error.type === "runtime") {
+                    return res.status(200).json({ success: false, result: "Runtime Error", message: error.stderr });
+                } else {
+                    return res.status(500).json({ success: false, result: "Internal Server Error", message: "Failed to execute code!" });
+                }
             }
         }
 
-        // If all the test cases pass
-        // Check if the problem is already in the user's solvedProblems list
-        const isProblemSolved = user.solvedProblems.some(
-            solvedProblem => solvedProblem.problemID.toString() === id.toString()
-        );
+        user.solvedProblems.push(problem._id);
+        await user.save();
+        cleanupFiles();
 
-        if (!isProblemSolved) {
-            // If the problem is not already in the solvedProblems list, add it
-            await User.findByIdAndUpdate(req.user.id, {
-                $push: {
-                    solvedProblems: {
-                        problemID: id,
-                        language,
-                        submissionDate: Date.now()
-                    },
-                },
-            });
-        }
-
-        // Add the successful submission to the problem's submissions list
-        await Problem.findByIdAndUpdate(id, {
-            $push: {
-                submissions: {
-                    user: user.username,
-                    result: "Accepted",
-                    language,
-                    code,
-                    submissionDate: Date.now()
-                },
-            },
-            $inc: {
-                acceptedCount: 1
-            }
+        return res.status(200).json({
+            success: true,
+            result: "Accepted",
+            message: "All test cases passed successfully",
         });
 
-        res.status(200).json({ success: true, result: "Accepted", message: "All test cases passed." });
     } catch (error) {
         res.status(500).json({ success: false, result: "Internal Server Error", message: "Failed to submit code!" });
     } finally {
