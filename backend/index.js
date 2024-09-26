@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import morgan from "morgan"
 import cookieParser from 'cookie-parser';
 import { userRouter } from './routes/user.js';
 import problemsRouter from './routes/problems.js'; // Import the problems router
@@ -16,6 +17,7 @@ console.log("MongoDB URL:", process.env.MONGO_URL);
 console.log("Server Port:", process.env.PORT);
 
 app.use(express.json());
+app.use(morgan("dev"));
 app.use(cors({
     origin:["http://localhost:5173"],
     credentials: true

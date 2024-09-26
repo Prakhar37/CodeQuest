@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 import Problem from "../models/Problem.js";
 import { User } from "../models/User.js";
 import authenticate from "../middleware/authen.js";
+import { updateUserStats } from './user.js';
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -195,57 +196,77 @@ router.post("/run", async (req, res) => {
     }
 });
 
+
 // Route to submit code with test cases
-router.post("/submit/:id",authenticate, async (req, res) => {
-    const { id } = req.params;
-    const { language, code, problem } = req.body;
-    // Handle case where req.user might be undefined
+router.post("/submit/:id", authenticate, async (req, res) => {
+    const { id } = req.params;  // The problem ID
+    const { language, code } = req.body;
+    const userId = req.user.id;
+
+    // Check if the user is authenticated
     if (!req.user || !req.user.id) {
         return res.status(401).json({ success: false, error: "Unauthorized" });
     }
-    const user = await User.findById(req.user.id);
 
-    if (!code) {
-        return res.status(400).json({ success: false, error: "Empty code!" });
+    // Find the problem by its ID
+    const problem = await Problem.findById(id);
+    if (!problem) {
+        return res.status(404).json({ success: false, error: "Problem not found!" });
     }
 
+    const { hiddenTestCases, difficulty } = problem;
+    console.log("TESTCASES:", hiddenTestCases)
+
+    // Map language to file extension
     const languageMap = {
         cpp: "cpp",
         java: "java",
         python: "py",
         javascript: "js",
     };
-
     const format = languageMap[language];
     if (!format) {
         return res.status(400).json({ success: false, error: "Unsupported language!" });
     }
 
     try {
-        const testCases = problem.testCases;
-
+        // Generate code file
         const filePath = await generateFile(format, code);
+        console.log("FILE GENERATED")
         let finalFilePath = filePath;
+        console.log("FILE PATH:", filePath)
 
+        console.log("LANGUAGE:", language)
         if (language === "java") {
             const publicClassName = extractPublicClassName(filePath);
             finalFilePath = path.join(path.dirname(filePath), `${publicClassName}.java`);
             fs.renameSync(filePath, finalFilePath);
         }
 
-        for (let i = 0; i < testCases.length; i++) {
-            const inputPath = await generateInputFile(filePath, testCases[i].input, i);
+        // Run the code against each test case
+        for (let i = 0; i < hiddenTestCases.length; i++) {
+            const inputPath = await generateInputFile(finalFilePath, hiddenTestCases[i].input, i);
+            console.log("INPUT FILE GENERATED")
 
             try {
                 const output = await executeCode(finalFilePath, language, inputPath);
-                if (output.trim() !== testCases[i].expectedOutput.trim()) {
+                console.log("OUTPUT:",output)
+                console.log("CODE EXECUTED")
+
+                // Compare output with expected output
+                console.log("--->",output.trim(),hiddenTestCases[i].output.trim())
+                if (output.trim() !== hiddenTestCases[i].output.trim()) {
+                    console.log("CHECKING OUTPUT")
                     return res.status(200).json({
                         success: false,
                         result: output,
                         message: `Wrong Answer on test case ${i + 1}`,
+                        output:output.trim(),
+                        expectedOutput:hiddenTestCases[i].output.trim(),
                     });
                 }
             } catch (error) {
+                // Handle different error types (compilation, runtime, TLE, MLE)
                 if (error.type === "compilation") {
                     return res.status(200).json({ success: false, result: "Compilation Error", message: error.stderr });
                 } else if (error.type === "TLE") {
@@ -260,21 +281,21 @@ router.post("/submit/:id",authenticate, async (req, res) => {
             }
         }
 
-        user.solvedProblems.push(problem._id);
-        await user.save();
-        cleanupFiles();
-
+        // If all test cases pass
+        await updateUserStats(userId, id);
+        
         return res.status(200).json({
-            success: true,
-            result: "Accepted",
-            message: "All test cases passed successfully",
+            passedAll:true
         });
 
+
     } catch (error) {
-        res.status(500).json({ success: false, result: "Internal Server Error", message: "Failed to submit code!" });
+        return res.status(500).json({ success: false, result: "Internal Server Error", message: "Failed to execute code!" });
     } finally {
         cleanupFiles();
+        // console.log("DONE")
     }
 });
+
 
 export default router;

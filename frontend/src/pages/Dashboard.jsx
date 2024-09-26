@@ -22,6 +22,7 @@ const Dashboard = () => {
                 if (res.data.status) {
                     setIsAuthenticated(true);
                     setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
+                    fetchUserStats();
                 } else {
                     navigate('/');
                 }
@@ -31,12 +32,26 @@ const Dashboard = () => {
             }
         };
 
+        // // Fetch user statistics
+        // const fetchUserStats = async () => {
+        //     try {
+        //         const solvedRes = await axios.get('http://localhost:3000/user/stats/solved');
+        //         const recentRes = await axios.get('http://localhost:3000/user/stats/recent');
+        //         const scoreRes = await axios.get('http://localhost:3000/user/stats/score');
+        //         setTotalSolved(solvedRes.data.totalProblemsSolved);
+        //         setRecentActivities(recentRes.data.recentActivities);
+        //         setScore(scoreRes.data.score);
+        //     } catch (err) {
+        //         console.error('Failed to fetch user stats:', err);
+        //     }
+        // };
+
         // Fetch user statistics
         const fetchUserStats = async () => {
             try {
-                const solvedRes = await axios.get('http://localhost:3000/user/stats/solved');
-                const recentRes = await axios.get('http://localhost:3000/user/stats/recent');
-                const scoreRes = await axios.get('http://localhost:3000/user/stats/score');
+                const solvedRes = await axios.get('http://localhost:3000/auth/stats/solved');
+                const recentRes = await axios.get('http://localhost:3000/auth/stats/recent');
+                const scoreRes = await axios.get('http://localhost:3000/auth/stats/score');
                 setTotalSolved(solvedRes.data.totalProblemsSolved);
                 setRecentActivities(recentRes.data.recentActivities);
                 setScore(scoreRes.data.score);
@@ -66,16 +81,24 @@ const Dashboard = () => {
                 <section className="overview">
                     <h2>Overview</h2>
                     <div className="overview-stats">
-                        <div className="stat-item">Total Problems Solved: 120</div>
+                        {/* Use 'totalSolved' to display the total problems solved */}
+                        <div className="stat-item">Total Problems Solved: {totalSolved}</div>
                         <div className="stat-item">Keep Solving!</div>
-                        <div className="stat-item">Score: 2500</div>
+                        {/* Use 'score' to display the user's score */}
+                        <div className="stat-item">Score: {score}</div>
                     </div>
                 </section>
                 <section className="recent-activities">
-                    <h2>Recent Activities</h2>
+                    <h2>Recent Problem Solved</h2>
                     <ul className="activity-list">
-                        <li>Solved Problem A</li>
-                        <li>Solved Problem B</li>
+                        {/* Use 'recentActivities' to dynamically display the recent activities */}
+                        {recentActivities.length === 0 ? (
+                            <li>No recent activities</li>
+                        ) : (
+                            recentActivities.map((activity, index) => (
+                                <li key={index}>{activity}</li>
+                            ))
+                        )}
                     </ul>
                 </section>
                 <section className="problem-list">

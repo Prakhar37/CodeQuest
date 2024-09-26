@@ -48,7 +48,7 @@ const problemSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+}, { timestamps: true });
 
 const Problem = mongoose.model('Problem', problemSchema);
 
