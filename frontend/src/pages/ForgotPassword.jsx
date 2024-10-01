@@ -10,7 +10,8 @@ const ForgotPassword = () => {
   
     const handleSubmit = (e) => {
       e.preventDefault();
-      axios.post('http://localhost:3000/auth/forgot-password', {
+      //axios.post('http://localhost:3000/auth/forgot-password', {
+      axios.post(`${API_URL}/auth/forgot-password`, {
         email,
       }).then(response => {
         if (response.data.status) {

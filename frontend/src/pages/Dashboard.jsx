@@ -18,7 +18,8 @@ const Dashboard = () => {
     useEffect(() => {
         const verifyUser = async () => {
             try {
-                const res = await axios.get('http://localhost:3000/auth/verify');
+                //const res = await axios.get('http://localhost:3000/auth/verify');
+                const res = await axios.get(`${API_URL}/auth/verify`);
                 if (res.data.status) {
                     setIsAuthenticated(true);
                     setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
@@ -49,9 +50,12 @@ const Dashboard = () => {
         // Fetch user statistics
         const fetchUserStats = async () => {
             try {
-                const solvedRes = await axios.get('http://localhost:3000/auth/stats/solved');
-                const recentRes = await axios.get('http://localhost:3000/auth/stats/recent');
-                const scoreRes = await axios.get('http://localhost:3000/auth/stats/score');
+              //  const solvedRes = await axios.get('http://localhost:3000/auth/stats/solved');
+                const solvedRes = await axios.get(`${API_URL}/auth/stats/solved`);
+                //const recentRes = await axios.get('http://localhost:3000/auth/stats/recent');
+                const recentRes = await axios.get(`${API_URL}/auth/stats/recent`);
+               // const scoreRes = await axios.get('http://localhost:3000/auth/stats/score');
+                const scoreRes = await axios.get(`${API_URL}/auth/stats/score`);
                 setTotalSolved(solvedRes.data.totalProblemsSolved);
                 setRecentActivities(recentRes.data.recentActivities);
                 setScore(scoreRes.data.score);
@@ -63,7 +67,8 @@ const Dashboard = () => {
         // Fetch the problems from the backend
         const fetchProblems = async () => {
             try {
-                const res = await axios.get('http://localhost:3000/problems/all'); // Adjust the route according to your API
+               // const res = await axios.get('http://localhost:3000/problems/all'); // Adjust the route according to your API
+                const res = await axios.get(`${API_URL}/problems/all`); // Adjust the route according to your API
                 setProblems(res.data); // Set the list of problems to the state
             } catch (err) {
                 console.error('Error fetching problems:', err);

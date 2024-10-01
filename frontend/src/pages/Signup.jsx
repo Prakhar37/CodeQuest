@@ -12,7 +12,8 @@ const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:3000/auth/signup', {
+    //axios.post('http://localhost:3000/auth/signup', {
+    axios.post(`${API_URL}/auth/signup`, {
       username,
       email,
       password,

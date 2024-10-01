@@ -22,7 +22,8 @@ const AddProblem = () => {
   useEffect(()=>{
     const verifyUser = async () => {
       try {
-          const res = await axios.get('http://localhost:3000/auth/verify');
+          //const res = await axios.get('http://localhost:3000/auth/verify');
+          const res = await axios.get(`${API_URL}/auth/verify`);
           if (res.data.status) {
               setIsAuthenticated(true);
               setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
