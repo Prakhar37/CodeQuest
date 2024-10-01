@@ -3,6 +3,7 @@ import '../App.css';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 const Login = () => {
@@ -14,7 +15,9 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     //axios.post('http://localhost:3000/auth/login', {
-    axios.post(`${API_URL}/auth/login`, {
+    console.log("API_URL:", API_URL);
+   // axios.post(`${API_URL}/auth/login`, {
+    axios.post('http://13.201.94.103:3000/auth/login', {
       email,
       password,
     },{withCredentials: true,}).then(response => {
