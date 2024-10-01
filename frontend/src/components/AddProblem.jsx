@@ -2,6 +2,9 @@ import React, { useEffect,useState } from 'react';
 import { createProblem } from '../services/problemService';
 import '../App.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
 
 const AddProblem = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,7 +20,7 @@ const AddProblem = () => {
     difficulty: 'Easy',
   });
 
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const verifyUser = async () => {

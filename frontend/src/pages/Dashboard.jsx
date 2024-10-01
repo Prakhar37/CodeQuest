@@ -5,6 +5,8 @@ import DashboardNavbar from '../components/DashboardNavbar';
 import '../App.css';
 import ProblemList from '../components/ProblemList';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);

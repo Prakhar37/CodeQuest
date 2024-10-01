@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../App.css';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const DashboardNavbar = ({ isAuthenticated, isAdmin }) => {
     const navigate = useNavigate();
 

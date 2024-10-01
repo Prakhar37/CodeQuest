@@ -41,6 +41,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
 
 const ProblemList = () => {
   const [problems, setProblems] = useState([]);

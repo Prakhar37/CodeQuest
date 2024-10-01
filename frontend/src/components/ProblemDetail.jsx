@@ -5,6 +5,8 @@ import MonacoEditor from "@monaco-editor/react"; // Added Monaco Editor import
 import { getProblemById } from "../services/problemService";
 import Swal from "sweetalert2"; // For showing popups
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const ProblemDetail = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
