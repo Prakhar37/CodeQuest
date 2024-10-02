@@ -41,7 +41,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const API_URL = process.env.REACT_APP_API_URL;
+// const API_URL = process.env.REACT_APP_API_URL;
 
 const ProblemList = () => {
   const [problems, setProblems] = useState([]);
@@ -51,12 +51,14 @@ const ProblemList = () => {
     const fetchProblems = async () => {
       try {
       //  const response = await axios.get('http://localhost:3000/api/problems/all');
-        const response = await axios.get(`${API_URL}/api/problems/all`);
+        const response = await axios.get('https://13.201.94.103:3000/api/problems/all');
+        //const response = await axios.get(`${API_URL}/api/problems/all`);
         setProblems(response.data);
         
         // Fetch user's solved problems from your API
         //const solvedResponse = await axios.get('http://localhost:3000/auth/solved');
-        const solvedResponse = await axios.get(`${API_URL}/auth/solved`);
+        const solvedResponse = await axios.get('https://13.201.94.103:3000/auth/solved');
+        // const solvedResponse = await axios.get(`${API_URL}/auth/solved`);
         console.log(solvedResponse.data)
         setSolvedProblems(solvedResponse.data.map(e=>e._id)); // Assuming the response contains a list of solved problem IDs
       } catch (error) {
