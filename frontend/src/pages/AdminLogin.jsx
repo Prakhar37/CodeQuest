@@ -58,7 +58,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   //  axios.post('http://localhost:3000/auth/login', {
-    axios.post('https://13.201.94.103:3000/auth/login', {
+    axios.post('http://13.201.94.103:3000/auth/login', {
     // axios.post(`${API_URL}/auth/login`, {
       email,
       password,

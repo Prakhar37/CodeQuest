@@ -30,7 +30,7 @@ const ProblemDetail = () => {
     const verifyUser = async () => {
       try {
        // const res = await axios.get("http://localhost:3000/auth/verify");
-        const res = await axios.get("https://13.201.94.103:3000/auth/verify");
+        const res = await axios.get("http://13.201.94.103:3000/auth/verify");
         //const res = await axios.get(`${API_URL}/auth/verify`);
         if (res.data.status) {
           setIsAuthenticated(true);
@@ -73,7 +73,7 @@ const ProblemDetail = () => {
     try {
       const response = await axios.post(
        // "http://localhost:3000/run",
-         "https://13.201.94.103:3000/run",
+         "http://13.201.94.103:3000/run",
         //`${API_URL}/run`,
         {
           language,
@@ -102,7 +102,7 @@ const ProblemDetail = () => {
     try {
       const response = await axios.post(
        // `http://localhost:3000/submit/${id}`,
-        `https://13.201.94.103:3000/submit/${id}`,
+        `http://13.201.94.103:3000/submit/${id}`,
         //`${API_URL}/submit/${id}`,
         {
           language,
