@@ -36,8 +36,6 @@ app.use((req, res, next) => {
 
 app.options('*', cors());
 app.use(cookieParser());
-app.use(express.json());
-app.use(morgan("dev"));
 
 // Routes
 app.use('/auth', userRouter);
