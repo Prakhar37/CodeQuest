@@ -15,7 +15,6 @@ console.log(process.env);
 const app = express();
 
 // Debug environment variables
-// console.log("MongoDB URL:", process.env.MONGO_URL);
 console.log("MongoDB URL:", process.env.MONGO_URL);
 console.log("Server Port:", process.env.PORT);
 
@@ -24,13 +23,19 @@ app.use(morgan("dev"));
 app.use(cors({
     origin:["https://code-quest-eight.vercel.app","http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://code-quest-eight.vercel.app");
   res.header("Access-Control-Allow-Credentials", "true");
-  next();
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200);
+  } else {
+    next();
+  }
 });
 
 
