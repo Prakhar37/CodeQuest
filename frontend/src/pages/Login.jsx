@@ -17,7 +17,7 @@ const Login = () => {
     //axios.post('http://localhost:3000/auth/login', {
     //console.log("API_URL:", API_URL);
    // axios.post(`${API_URL}/auth/login`, {
-    axios.post('http://13.201.94.103:3000/auth/login', {
+    axios.post('https://13.201.94.103:3000/auth/login', {
       email,
       password,
     },{withCredentials: true,}).then(response => {
