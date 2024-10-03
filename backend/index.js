@@ -9,6 +9,8 @@ import problemsRouter from './routes/problems.js'; // Import the problems router
 import execution from "./routes/execution.js";
 
 dotenv.config();
+console.log(process.env);
+
 
 const app = express();
 
@@ -21,9 +23,13 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({
     origin:["https://code-quest-eight.vercel.app/","http://localhost:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true
 }));
+app.options('*', cors());
 app.use(cookieParser());
+app.use(express.json());
+app.use(morgan("dev"));
 
 // Routes
 app.use('/auth', userRouter);
