@@ -14,8 +14,8 @@ const app = express();
 
 // Debug environment variables
 // console.log("MongoDB URL:", process.env.MONGO_URL);
-// console.log("MongoDB URL:", process.env.MONGO_URL);
-// console.log("Server Port:", process.env.PORT);
+console.log("MongoDB URL:", process.env.MONGO_URL);
+console.log("Server Port:", process.env.PORT);
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -48,3 +48,10 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT,'0.0.0.0', () => {
   console.log(`Server is Running on port ${PORT}`);
 });
+
+
+
+
+MONGO_URL = "mongodb+srv://prakharshrivastava0702:CodeQues0702@cluster0.8fewqlx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+KEY = "jwttokenkey"
+PORT=3000
