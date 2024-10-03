@@ -35,8 +35,7 @@ app.get('/test', (req, res) => {
 
 
 // Database connection
-// mongoose.connect(process.env.MONGO_URL, {
-mongoose.connect("mongodb+srv://prakharshrivastava0702:CodeQues0702@cluster0.8fewqlx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
@@ -52,6 +51,3 @@ app.listen(PORT,'0.0.0.0', () => {
 
 
 
-MONGO_URL = "mongodb+srv://prakharshrivastava0702:CodeQues0702@cluster0.8fewqlx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-KEY = "jwttokenkey"
-PORT=3000
