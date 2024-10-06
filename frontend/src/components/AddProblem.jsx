@@ -1,8 +1,8 @@
-import React, { useEffect,useState } from 'react';
-import { createProblem } from '../services/problemService';
-import '../App.css';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { createProblem } from "../services/problemService";
+import "../App.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 //const API_URL = process.env.REACT_APP_API_URL;
 
@@ -10,40 +10,45 @@ const AddProblem = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    inputFormat: '',
-    outputFormat: '',
-    constraints: '',
-    examples: [{ input: '', output: '' }],
-    hiddenTestCases: [{ input: '', output: '' }],
-    difficulty: 'Easy',
+    title: "",
+    description: "",
+    inputFormat: "",
+    outputFormat: "",
+    constraints: "",
+    examples: [{ input: "", output: "" }],
+    hiddenTestCases: [{ input: "", output: "" }],
+    difficulty: "Easy",
   });
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     const verifyUser = async () => {
       try {
-          //const res = await axios.get('http://localhost:3000/auth/verify');
-          const res = await axios.get('http://13.201.94.103:3000/auth/verify',{
-            headers: { Authorization: `Bearer ${token}` },
-          });
-         // const res = await axios.get(`${API_URL}/auth/verify`);
-          if (res.data.status) {
-              setIsAuthenticated(true);
-              setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
-          } else {
-              navigate('/');
-          }
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+        //const res = await axios.get('http://localhost:3000/auth/verify');
+        const res = await axios.get("http://13.201.94.103:3000/auth/verify", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        // const res = await axios.get(`${API_URL}/auth/verify`);
+        if (res.data.status) {
+          setIsAuthenticated(true);
+          setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
+        } else {
+          navigate("/");
+        }
       } catch (error) {
-          console.error('Error verifying user:', error);
-          navigate('/login');
+        console.error("Error verifying user:", error);
+        navigate("/login");
       }
-  };
+    };
 
-  verifyUser();
-  },[navigate])
+    verifyUser();
+  }, [navigate]);
 
   const [error, setError] = useState(null);
 
@@ -74,7 +79,7 @@ const AddProblem = () => {
   const handleAddExample = () => {
     setFormData({
       ...formData,
-      examples: [...formData.examples, { input: '', output: '' }],
+      examples: [...formData.examples, { input: "", output: "" }],
     });
   };
 
@@ -82,7 +87,7 @@ const AddProblem = () => {
   const handleAddHiddenTestCase = () => {
     setFormData({
       ...formData,
-      hiddenTestCases: [...formData.hiddenTestCases, { input: '', output: '' }],
+      hiddenTestCases: [...formData.hiddenTestCases, { input: "", output: "" }],
     });
   };
 
@@ -91,20 +96,23 @@ const AddProblem = () => {
     setError(null); // Clear previous error
     try {
       await createProblem(formData);
-      alert('Problem created successfully');
+      alert("Problem created successfully");
       setFormData({
-        title: '',
-        description: '',
-        inputFormat: '',
-        outputFormat: '',
-        constraints: '',
-        examples: [{ input: '', output: '' }],
-        hiddenTestCases: [{ input: '', output: '' }],
-        difficulty: 'Easy',
+        title: "",
+        description: "",
+        inputFormat: "",
+        outputFormat: "",
+        constraints: "",
+        examples: [{ input: "", output: "" }],
+        hiddenTestCases: [{ input: "", output: "" }],
+        difficulty: "Easy",
       });
     } catch (error) {
-      console.error('Error creating problem:', error.response ? error.response.data : error.message);
-      setError('Failed to create problem. Please try again.');
+      console.error(
+        "Error creating problem:",
+        error.response ? error.response.data : error.message
+      );
+      setError("Failed to create problem. Please try again.");
     }
   };
 
@@ -120,9 +128,9 @@ const AddProblem = () => {
 
       <form className="add-problem-form" onSubmit={handleSubmit}>
         {/* Existing form fields */}
-         <div className="form-group">
-            <label htmlFor="title">Title:</label>
-            <input
+        <div className="form-group">
+          <label htmlFor="title">Title:</label>
+          <input
             type="text"
             id="title"
             name="title"
@@ -183,7 +191,7 @@ const AddProblem = () => {
             placeholder="Enter constraints"
             required
           />
-        </div> 
+        </div>
 
         <div className="examples-section">
           <h3>Examples:</h3>
@@ -196,7 +204,7 @@ const AddProblem = () => {
                   type="text"
                   value={example.input}
                   onChange={(e) =>
-                    handleExampleChange(index, 'input', e.target.value)
+                    handleExampleChange(index, "input", e.target.value)
                   }
                   placeholder="Enter example input"
                   required
@@ -209,7 +217,7 @@ const AddProblem = () => {
                   type="text"
                   value={example.output}
                   onChange={(e) =>
-                    handleExampleChange(index, 'output', e.target.value)
+                    handleExampleChange(index, "output", e.target.value)
                   }
                   placeholder="Enter example output"
                   required
@@ -234,11 +242,11 @@ const AddProblem = () => {
               <div className="form-group">
                 <label>Hidden Test Case {index + 1} Input:</label>
                 <textarea
-                  rows = "4"
+                  rows="4"
                   type="text"
                   value={testCase.input}
                   onChange={(e) =>
-                    handleHiddenTestCaseChange(index, 'input', e.target.value)
+                    handleHiddenTestCaseChange(index, "input", e.target.value)
                   }
                   placeholder="Enter hidden test case input"
                   required
@@ -251,7 +259,7 @@ const AddProblem = () => {
                   type="text"
                   value={testCase.output}
                   onChange={(e) =>
-                    handleHiddenTestCaseChange(index, 'output', e.target.value)
+                    handleHiddenTestCaseChange(index, "output", e.target.value)
                   }
                   placeholder="Enter hidden test case output"
                   required
@@ -295,5 +303,3 @@ const AddProblem = () => {
 };
 
 export default AddProblem;
-
-

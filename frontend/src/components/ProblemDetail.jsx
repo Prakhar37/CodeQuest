@@ -29,8 +29,13 @@ const ProblemDetail = () => {
   useEffect(() => {
     const verifyUser = async () => {
       try {
-       // const res = await axios.get("http://localhost:3000/auth/verify");
-        const res = await axios.get("http://13.201.94.103:3000/auth/verify",{
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+        // const res = await axios.get("http://localhost:3000/auth/verify");
+        const res = await axios.get("http://13.201.94.103:3000/auth/verify", {
           headers: { Authorization: `Bearer ${token}` },
         });
         //const res = await axios.get(`${API_URL}/auth/verify`);
@@ -74,8 +79,8 @@ const ProblemDetail = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-       // "http://localhost:3000/run",
-         "http://13.201.94.103:3000/run",
+        // "http://localhost:3000/run",
+        "http://13.201.94.103:3000/run",
         //`${API_URL}/run`,
         {
           language,
@@ -103,7 +108,7 @@ const ProblemDetail = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-       // `http://localhost:3000/submit/${id}`,
+        // `http://localhost:3000/submit/${id}`,
         `http://13.201.94.103:3000/submit/${id}`,
         //`${API_URL}/submit/${id}`,
         {
