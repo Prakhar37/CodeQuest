@@ -21,7 +21,7 @@ const Login = () => {
       email,
       password,
     },{withCredentials: true,}).then(response => {
-        console.log(response.data);
+      console.log(response);
       if (response.data.status) {
         navigate('/dashboard');
       }

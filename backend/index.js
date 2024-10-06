@@ -21,7 +21,7 @@ console.log("Server Port:", process.env.PORT);
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({
-    origin:["https://code-quest-eight.vercel.app","http://localhost:5173"],
+    origin:["https://code-quest-eight.vercel.app","http://172.17.176.1:3000/"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
