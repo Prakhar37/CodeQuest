@@ -24,7 +24,7 @@ const Dashboard = () => {
                 const res = await axios.get('http://13.201.94.103:3000/auth/verify');
                 // const res = await axios.get(`${API_URL}/auth/verify`);
                 console.log(res);
-                if (res.data.status) {
+                if (res.status) {
                     setIsAuthenticated(true);
                     setIsAdmin(res.data.isAdmin); // Assuming your API returns this info
                     fetchUserStats();
