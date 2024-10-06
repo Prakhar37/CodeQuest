@@ -103,7 +103,7 @@ const Dashboard = () => {
     const fetchProblems = async () => {
       try {
         // const res = await axios.get('http://localhost:3000/problems/all'); // Adjust the route according to your API
-        const res = await axios.get("http://13.201.94.103:3000/problems/all"); // Adjust the route according to your API
+        const res = await axios.get("http://13.201.94.103:3000/api/problems/all"); // Adjust the route according to your API
         // const res = await axios.get(`${API_URL}/problems/all`); // Adjust the route according to your API
         setProblems(res.data); // Set the list of problems to the state
       } catch (err) {
