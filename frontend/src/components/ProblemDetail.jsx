@@ -107,15 +107,20 @@ const ProblemDetail = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
       const response = await axios.post(
-        // `http://localhost:3000/submit/${id}`,
+        // `http://localhost:3000/submit/${id}`,headers: { Authorization: `Bearer ${token}` },
         `http://13.201.94.103:3000/submit/${id}`,
         //`${API_URL}/submit/${id}`,
         {
           language,
           code, // No input is required; this is for hidden test cases
         },
-        { withCredentials: true }
+        { withCredentials: true, headers: { Authorization: `Bearer ${token}` } }
       );
       console.log("GOT RESPONSE");
       if (response.data.passedAll) {
