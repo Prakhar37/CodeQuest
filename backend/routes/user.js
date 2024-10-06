@@ -70,7 +70,7 @@ const updateUserStats = async (userId, problemId) => {
 
 // Route to fetch solved problems for the current user
 router.get("/solved", verifyUser, async (req, res) => {
-    console.log("Solved problems")
+  console.log("Solved problems");
   try {
     const userId = req.user.id; // Use JWT decoded user ID
 
@@ -154,8 +154,8 @@ router.post("/login", async (req, res) => {
     // Set the token in an HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true, // Prevent access to the cookie from JavaScript
-      secure:false,
-     // secure: process.env.NODE_ENV === "production", // Use secure flag in production
+      secure: false,
+      // secure: process.env.NODE_ENV === "production", // Use secure flag in production
       maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
     });
 
