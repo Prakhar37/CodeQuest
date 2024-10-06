@@ -26,7 +26,7 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((response) => {
-        console.log("LOGIN", response);
+        console.log("LOGIN");
         if (response.data.status) {
           navigate("/dashboard");
         }
