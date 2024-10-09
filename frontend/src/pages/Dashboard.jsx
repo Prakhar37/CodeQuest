@@ -27,7 +27,8 @@ const Dashboard = () => {
           return;
         }
         // const res = await axios.get('http://13.201.94.103:3000/auth/verify');
-        const res = await axios.get("http://13.201.94.103:3000/auth/verify", {
+        //  const res = await axios.get("http://13.201.94.103:3000/auth/verify", {
+         const res = await axios.get("https://backend.codeques.site/auth/verify", {
           headers: { Authorization: `Bearer ${token}` },
         });
         // const res = await axios.get(`${API_URL}/auth/verify`);
@@ -69,7 +70,8 @@ const Dashboard = () => {
         }
         //  const solvedRes = await axios.get('http://localhost:3000/auth/stats/solved');
         const solvedRes = await axios.get(
-          "http://13.201.94.103:3000/auth/stats/solved",
+          // "http://13.201.94.103:3000/auth/stats/solved",
+          "https://backend.codeques.site/auth/stats/solved",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -77,7 +79,8 @@ const Dashboard = () => {
         // const solvedRes = await axios.get(`${API_URL}/auth/stats/solved`);
         //const recentRes = await axios.get('http://localhost:3000/auth/stats/recent');
         const recentRes = await axios.get(
-          "http://13.201.94.103:3000/auth/stats/recent",
+          // "http://13.201.94.103:3000/auth/stats/recent",
+          "https://backend.codeques.site/auth/stats/recent",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -85,7 +88,8 @@ const Dashboard = () => {
         // const recentRes = await axios.get(`${API_URL}/auth/stats/recent`);
         // const scoreRes = await axios.get('http://localhost:3000/auth/stats/score');
         const scoreRes = await axios.get(
-          "http://13.201.94.103:3000/auth/stats/score",
+          // "http://13.201.94.103:3000/auth/stats/score",
+          "https://backend.codeques.site/auth/stats/score",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -103,7 +107,8 @@ const Dashboard = () => {
     const fetchProblems = async () => {
       try {
         // const res = await axios.get('http://localhost:3000/problems/all'); // Adjust the route according to your API
-        const res = await axios.get("http://13.201.94.103:3000/api/problems/all"); // Adjust the route according to your API
+        // const res = await axios.get("http://13.201.94.103:3000/api/problems/all"); // Adjust the route according to your API
+        const res = await axios.get("https://backend.codeques.site/api/problems/all"); // Adjust the route according to your API
         // const res = await axios.get(`${API_URL}/problems/all`); // Adjust the route according to your API
         setProblems(res.data); // Set the list of problems to the state
       } catch (err) {

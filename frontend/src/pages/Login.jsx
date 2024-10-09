@@ -18,7 +18,8 @@ const Login = () => {
     // axios.post(`${API_URL}/auth/login`, {
     axios
       .post(
-        "http://13.201.94.103:3000/auth/login",
+        // "http://13.201.94.103:3000/auth/login",
+        "https://backend.codeques.site/auth/login",
         {
           email,
           password,
