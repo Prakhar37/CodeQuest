@@ -11,7 +11,8 @@ const DashboardNavbar = ({ isAuthenticated, isAdmin }) => {
     const handleLogout = async () => {
         try {
            // await axios.post('http://localhost:3000/auth/logout'); // Assuming this is your logout endpoint
-            await axios.post('http://13.201.94.103:3000/auth/logout'); // Assuming this is your logout endpoint
+            // await axios.post('http://13.201.94.103:3000/auth/logout'); // Assuming this is your logout endpoint
+            await axios.post('https://backend.codeques.site/auth/logout'); // Assuming this is your logout endpoint
             //await axios.post(`${API_URL}/auth/logout`); // Assuming this is your logout endpoint
             navigate('/'); // Redirect to home or login page after logout
         } catch (error) {

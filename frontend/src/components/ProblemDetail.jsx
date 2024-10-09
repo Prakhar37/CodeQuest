@@ -35,7 +35,7 @@ const ProblemDetail = () => {
           return;
         }
         // const res = await axios.get("http://localhost:3000/auth/verify");
-        const res = await axios.get("http://13.201.94.103:3000/auth/verify", {
+        const res = await axios.get("https://backend.codeques.site/auth/verify", {
           headers: { Authorization: `Bearer ${token}` },
         });
         //const res = await axios.get(`${API_URL}/auth/verify`);
@@ -80,7 +80,8 @@ const ProblemDetail = () => {
     try {
       const response = await axios.post(
         // "http://localhost:3000/run",
-        "http://13.201.94.103:3000/run",
+        // "http://13.201.94.103:3000/run",
+        "https://backend.codeques.site/run",
         //`${API_URL}/run`,
         {
           language,
@@ -114,7 +115,8 @@ const ProblemDetail = () => {
       }
       const response = await axios.post(
         // `http://localhost:3000/submit/${id}`,headers: { Authorization: `Bearer ${token}` },
-        `http://13.201.94.103:3000/submit/${id}`,
+        // `http://13.201.94.103:3000/submit/${id}`,
+        `https://backend.codeques.site/submit/${id}`,
         //`${API_URL}/submit/${id}`,
         {
           language,

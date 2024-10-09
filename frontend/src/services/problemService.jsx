@@ -1,6 +1,7 @@
 import axios from 'axios';
 //const API_URL = 'http://localhost:3000/api/problems';
-const API_URL = 'http://13.201.94.103:3000/api/problems';
+// const API_URL = 'http://13.201.94.103:3000/api/problems';
+const API_URL = 'https://backend.codeques.site/api/problems';
 
 export const createProblem = (problemData) => {
     return axios.post(`${API_URL}/create`, problemData);
